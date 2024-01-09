@@ -1,2 +1,3 @@
-## Zetatrack: WIP
-Zetamac progress-tracking Python app built with pandas, matplotlib, and tkinter
+# Zetatrack: WIP
+Zetamac progress-tracking Python app
+Based on with pandas, matplotlib, tkinter
