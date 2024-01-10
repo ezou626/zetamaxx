@@ -15,18 +15,31 @@ class Chart(tk.Frame):
         self.parent = parent
 
         x = pd.date_range('2018-11-03', '2019-03-20')
+        y = np.arange(len(x))
+        
+        self.data = pd.DataFrame({
+            'Timestamp': pd.Series(dtype='datetime64[ns]'),
+            'Score': pd.Series(dtype='int'),
+            'Seconds': pd.Series(dtype='int'),
+            'Default': pd.Series(dtype='bool')
+        })
+        
+        self.data['Timestamp'] = x
+        self.data['Score'] = y
+        
         figure = plt.figure(1)
         
-        plt.plot(x, np.arange(len(x)))
+        plt.plot(self.data['Timestamp'], self.data['Score'])
         plt.xticks(rotation=45)
-        ax=plt.gca()
-        # ax.xaxis.set_major_locator(ticker.MultipleLocator(7))
+        ax = plt.gca()
+        ax.xaxis.set_major_locator(ticker.MultipleLocator(7))
         
         scatter = FigureCanvasTkAgg(figure, self)
         scatter.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
         
-    def add_point(self, score):
-        pass
+        
+    def add_point(self):
+        
 
 class App(tk.Tk):
     """Wrapper window for application
