@@ -3,26 +3,43 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
+import tkinter.ttk as ttk
 
 import matplotlib
 matplotlib.use("TkAgg")
 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-class Chart(tk.Frame):
-    def __init__(self, parent, *args, **kwargs):
+def validate_input(string):
+        return string == "" or string.isdigit() #check digits
+
+class Menu(tk.Frame):
+    def __init__(self, parent: tk.Tk, data: pd.DataFrame, *args, **kwargs):
         tk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
+        self.data = data
+        
+        self.score_entry = tk.Entry(self, width=25)
+        callback = self.parent.register(validate_input)
+        self.score_entry.config(validate = 'key', validatecommand = (callback, '%P'))
+        self.score_entry.grid(ipady=3, column = 1, row = 1)
+        
+        self.seconds_entry = ttk.Combobox(self, values = [30, 60, 120, 300, 600])
+        self.seconds_entry.current(2)
+        self.seconds_entry.grid(column = 2, row = 1)
+        
+        self.default_entry = ttk.Combobox(self, values = [True, False])
+        self.default_entry.current(1)
+        self.default_entry.grid(column = 3, row = 1)
+
+class Chart(tk.Frame):
+    def __init__(self, parent: tk.Tk, data: pd.DataFrame, *args, **kwargs):
+        tk.Frame.__init__(self, parent, *args, **kwargs)
+        self.parent = parent
+        self.data = data
 
         x = pd.date_range('2018-11-03', '2019-03-20')
         y = np.arange(len(x))
-        
-        self.data = pd.DataFrame({
-            'Timestamp': pd.Series(dtype='datetime64[ns]'),
-            'Score': pd.Series(dtype='int'),
-            'Seconds': pd.Series(dtype='int'),
-            'Default': pd.Series(dtype='bool')
-        })
         
         self.data['Timestamp'] = x
         self.data['Score'] = y
@@ -37,9 +54,8 @@ class Chart(tk.Frame):
         scatter = FigureCanvasTkAgg(figure, self)
         scatter.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
         
-        
     def add_point(self):
-        
+        pass
 
 class App(tk.Tk):
     """Wrapper window for application
@@ -49,9 +65,24 @@ class App(tk.Tk):
         self.state('zoomed') #fullscreen
         self.protocol("WM_DELETE_WINDOW", self.quit) #end process on close
         
-        #add chart
-        self.chart = Chart(self)
-        self.chart.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+        self.data = pd.DataFrame({
+            'Timestamp': pd.Series(dtype='datetime64[ns]'),
+            'Score': pd.Series(dtype='int'),
+            'Seconds': pd.Series(dtype='int'),
+            'Default': pd.Series(dtype='bool')
+        })
+        
+        #chart
+        self.chart = Chart(self, self.data)
+        self.chart.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        
+        #menu
+        self.menu = Menu(self, self.data)
+        self.menu.pack(fill=tk.X, expand=True)
+        
+        #add button
+        self.submit_button = tk.Button(self, text = 'Add Result', )
+        self.submit_button.pack(pady=10, expand=True)
 
 #runs the app
 if __name__ == "__main__":
