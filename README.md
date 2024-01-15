@@ -1,3 +1,3 @@
-# Zetatrack: WIP
+# Zetamaxx: WIP
 Zetamac progress-tracking Python app
-Based on with pandas, matplotlib, tkinter
+Built with pandas, matplotlib, tkinter, and immense struggle
