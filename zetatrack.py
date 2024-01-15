@@ -14,9 +14,8 @@ def validate_input(string):
         return string == "" or string.isdigit() #check digits
 
 class Menu(tk.Frame):
-    def __init__(self, parent: tk.Tk, data: pd.DataFrame, *args, **kwargs):
-        tk.Frame.__init__(self, parent, *args, **kwargs)
-        self.parent = parent
+    def __init__(self, parent: tk.Tk, data: pd.DataFrame):
+        tk.Frame.__init__(self, parent)
         self.data = data
         
         self.score_entry = tk.Entry(self, width=25)
@@ -33,9 +32,8 @@ class Menu(tk.Frame):
         self.default_entry.grid(column = 3, row = 1)
 
 class Chart(tk.Frame):
-    def __init__(self, parent: tk.Tk, data: pd.DataFrame, *args, **kwargs):
-        tk.Frame.__init__(self, parent, *args, **kwargs)
-        self.parent = parent
+    def __init__(self, parent: tk.Tk, data: pd.DataFrame):
+        tk.Frame.__init__(self, parent)
         self.data = data
 
         x = pd.date_range('2018-11-03', '2019-03-20')
@@ -53,24 +51,49 @@ class Chart(tk.Frame):
         
         scatter = FigureCanvasTkAgg(figure, self)
         scatter.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+    
+    
+class DataWrapper():
+    def __init__(self):
+        self.data: pd.DataFrame = pd.read_csv('data.tsv', sep='\t')
         
-    def add_point(self):
-        pass
+        #correct to empty if no/bad data
+        standard_columns = set(['Timestamp', 'Score', 'Seconds', 'Default'])
+        if len(standard_columns.intersection(self.data.columns)) != 4:
+            self.data = pd.DataFrame({
+                'Timestamp': pd.Series(dtype='datetime64[ns]'),
+                'Score': pd.Series(dtype='int'),
+                'Seconds': pd.Series(dtype='int'),
+                'Default': pd.Series(dtype='bool')
+            })
+            
+    def add_point(self, timestamp, score, seconds, default):
+        new_row = {
+            'Timestamp': timestamp,
+            'Score': score,
+            'Seconds': seconds,
+            'Default': default
+        }
+        self.data = self.data.append(new_row, ignore_index=True)
+    
+    def get_data(self):
+        """
+        TODO: Add support for other settings
+        Returns:
+            (pd.Series, pd.Series): (timestamps, scores)
+        """
+        return self.data['Timestamp'], self.data['Score']
+        
 
 class App(tk.Tk):
     """Wrapper window for application
     """
-    def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
+    def __init__(self):
+        tk.Tk.__init__(self)
         self.state('zoomed') #fullscreen
         self.protocol("WM_DELETE_WINDOW", self.quit) #end process on close
         
-        self.data = pd.DataFrame({
-            'Timestamp': pd.Series(dtype='datetime64[ns]'),
-            'Score': pd.Series(dtype='int'),
-            'Seconds': pd.Series(dtype='int'),
-            'Default': pd.Series(dtype='bool')
-        })
+        self.data: DataWrapper = DataWrapper()
         
         #chart
         self.chart = Chart(self, self.data)
