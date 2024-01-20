@@ -25,6 +25,12 @@ class DataContainer():
         }
         self.data: pd.DataFrame = self.data.append(new_row, ignore_index=True)
         self.data.to_csv('data.tsv', sep='\t', index=False)
+        
+    def remove_last(self):
+        if len(self.data) == 0:
+            return
+        self.data: pd.DataFrame = self.data.iloc[:-1]
+        self.data.to_csv('data.tsv', sep='\t', index=False)
     
     def get_data(self, default_time, default_settings):
         """
