@@ -3,11 +3,69 @@ from datacontainer import DataContainer
 
 import tkinter as tk
 import tkinter.ttk as ttk
+from tkinter.messagebox import showwarning
 
-class EditScoreMenu(tk.Frame):
-    pass
+from datetime import datetime
 
-class FocusOptionsMenu(tk.Frame):
+class EditScoresMenu(tk.Frame):
+    """Menu to add and remove scores
+    """
+    
+    def __init__(self, parent: tk.Frame, window: tk.Tk, chart: Chart, data_container: DataContainer):
+        """Constructs the widget to edit scores
+
+        Args:
+            parent (tk.Frame): parent frame
+            window (tk.Tk): parent window to register command
+            chart (Chart): application chart
+            data_container (DataContainer): wrapper class for data
+        """
+        tk.Frame.__init__(self, parent)
+        self.data_container = data_container
+        self.chart = chart
+        
+        self.score_entry = tk.Entry(self, width=25)
+        callback = window.register(self.validate_input) #might smell
+        self.score_entry.config(validate = 'key', validatecommand = (callback, '%P'))
+        self.score_entry.grid(ipady=3, column = 1, row = 1)
+        
+        self.seconds_entry = ttk.Combobox(self, values = [30, 60, 120, 300, 600])
+        self.seconds_entry.current(2)
+        self.seconds_entry.grid(column = 2, row = 1)
+        
+        self.default_entry = ttk.Combobox(self, values = [True, False])
+        self.default_entry.current(0)
+        self.default_entry.grid(column = 3, row = 1)
+        
+        self.add_button = tk.Button(self, text = 'Add Score', command = self.add_score)
+        self.add_button.grid(column = 4, row = 1)
+        
+    def add_score(self):
+        """Adds new score to data and refreshes chart
+
+        """
+        score = self.score_entry.get() #guaranteed to be integer or empty
+        if score == "":
+            showwarning('Invalid Score', 'Please Enter a Score')
+            return
+        time = datetime.now()
+        seconds = int(self.seconds_entry.get()) #guaranteed to be integer and not empty
+        default = bool(self.default_entry.get()) #guaranteed to be boolean and not empty
+        print(score, time, seconds, default)
+        
+    @staticmethod
+    def validate_input(string):
+        """Checks if the string is entirely composed of digits
+
+        Args:
+            string (_type_): string to be checked
+
+        Returns:
+            Boolean: True if is digits, False otherwise
+        """
+        return string == "" or string.isdigit()
+
+class DataDisplayMenu(tk.Frame):
     pass
 
 class Menu(tk.Frame):
@@ -27,19 +85,10 @@ class Menu(tk.Frame):
         self.data_container = data_container
         self.chart = chart
         
-        self.score_entry = tk.Entry(self, width=25)
-        callback = parent.register(self.validate_input) #might smell
-        self.score_entry.config(validate = 'key', validatecommand = (callback, '%P'))
-        self.score_entry.grid(ipady=3, column = 1, row = 1)
+        #edit scores menu
+        self.edit_score_menu = EditScoresMenu(self, parent, chart, data_container)
+        self.edit_score_menu.pack()
         
-        self.seconds_entry = ttk.Combobox(self, values = [30, 60, 120, 300, 600])
-        self.seconds_entry.current(2)
-        self.seconds_entry.grid(column = 2, row = 1)
-        
-        self.default_entry = ttk.Combobox(self, values = [True, False])
-        self.default_entry.current(1)
-        self.default_entry.grid(column = 3, row = 1)
-    
-    @staticmethod
-    def validate_input(string):
-        return string == "" or string.isdigit()
+        # #data display menu
+        # self.data_display_menu = DataDisplayMenu(self, parent, chart, data_container)
+        # self.data_display_menu.pack()
