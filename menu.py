@@ -74,6 +74,7 @@ class EditScoresMenu(tk.Frame):
     
     def remove_score(self):
         """Removes the last score added (undo)"""
+        pass
 
 class DataDisplayMenu(tk.Frame):
     pass
