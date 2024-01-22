@@ -39,6 +39,9 @@ class EditScoresMenu(tk.Frame):
         self.add_button = tk.Button(self, text = 'Add Score', command = self.add_score)
         self.add_button.grid(column = 4, row = 1)
         
+        self.remove_button = tk.Button(self, text = 'Remove Score', command = self.remove_score)
+        self.remove_button.grid(column = 5, row = 1)
+        
     def add_score(self):
         """Adds new score to data and refreshes chart
 
@@ -68,6 +71,9 @@ class EditScoresMenu(tk.Frame):
             bool: True if is digits, False otherwise
         """
         return string == "" or string.isdigit()
+    
+    def remove_score(self):
+        """Removes the last score added (undo)"""
 
 class DataDisplayMenu(tk.Frame):
     pass
