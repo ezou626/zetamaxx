@@ -5,8 +5,10 @@ from typing import Optional
 class DataContainer():
     """Wrapper for pandas dataframe involving the data"""
     
-    def __init__(self):
+    def __init__(self, data_file: str = 'data.tsv'):
         """Reads data from storage file and loads it into a dataframe variable"""
+        
+        self.data_file = data_file
         
         self.data = pd.DataFrame({
                 'Timestamp': pd.Series(dtype='datetime64[ns]'),
@@ -17,7 +19,7 @@ class DataContainer():
             })
         
         try:
-            self.data = pd.read_csv('data.tsv', sep='\t')
+            self.data = pd.read_csv(self.data_file, sep='\t')
         except pd.errors.EmptyDataError:
             pass
             
@@ -37,7 +39,7 @@ class DataContainer():
                                 ], 
                                 columns = self.data.columns)],
                                 ignore_index=True)
-        self.data.to_csv('data.tsv', sep='\t', index=False)
+        self.data.to_csv(self.data_file, sep='\t', index=False)
         
     def has_last(self) -> bool:
         """Checks if data container is empty
@@ -61,7 +63,7 @@ class DataContainer():
             raise ValueError('No more elements in dataframe')
         last_row = self.data.iloc[:-1]
         self.data: pd.DataFrame = self.data.iloc[:-1]
-        self.data.to_csv('data.tsv', sep='\t', index=False)
+        self.data.to_csv(self.data_file, sep='\t', index=False)
         return last_row
     
     def get_data(self, default_time: Optional[bool] = True, default_settings: Optional[bool] = True, 
