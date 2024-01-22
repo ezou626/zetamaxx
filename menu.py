@@ -8,8 +8,7 @@ from tkinter.messagebox import showwarning
 from datetime import datetime
 
 class EditScoresMenu(tk.Frame):
-    """Menu to add and remove scores
-    """
+    """Menu to add scores"""
     
     def __init__(self, parent: tk.Frame, window: tk.Tk, chart: Chart, data_container: DataContainer):
         """Constructs the widget to edit scores
@@ -51,17 +50,22 @@ class EditScoresMenu(tk.Frame):
         time = datetime.now()
         seconds = int(self.seconds_entry.get()) #guaranteed to be integer and not empty
         default = bool(self.default_entry.get()) #guaranteed to be boolean and not empty
-        print(score, time, seconds, default)
+        #print(score, time, seconds, default)
+        
+        self.data_container.add_point(time, score, seconds, default)
+        x, y = self.data_container.get_data()
+        
+        self.chart.update_chart(x, y)
         
     @staticmethod
     def validate_input(string):
         """Checks if the string is entirely composed of digits
 
         Args:
-            string (_type_): string to be checked
+            string (str): string to be checked
 
         Returns:
-            Boolean: True if is digits, False otherwise
+            bool: True if is digits, False otherwise
         """
         return string == "" or string.isdigit()
 
@@ -71,7 +75,7 @@ class DataDisplayMenu(tk.Frame):
 class Menu(tk.Frame):
     """Menu widget to contain all of the controls for the chart and data
 
-    Stores references to chart and data_container to consume their APIs
+    Stores references to Chart and DataContainer to consume their APIs
     """
     def __init__(self, parent: tk.Tk, chart: Chart, data_container: DataContainer):
         """Constructs the Menu widget
