@@ -1,4 +1,5 @@
 import tkinter as tk
+import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -6,10 +7,8 @@ import matplotlib
 matplotlib.use("TkAgg")
 
 class Chart(tk.Frame):
-    """Chart widget
+    """Chart widget that displays data and refreshes upon update"""
     
-    Displays data and refreshes upon update
-    """
     def __init__(self, parent: tk.Tk):
         """Initializes the chart, creating the figure and widget
 
@@ -21,15 +20,34 @@ class Chart(tk.Frame):
         self.scatter = FigureCanvasTkAgg(self.figure, self)
         self.scatter.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
         
-    def update_chart(self, x, y, title: str = '', x_label: str = '', y_label: str = ''):
+    def update_chart(self, x: pd.Series, y: pd.Series, 
+                     title: str = 'Zetamac History', x_label: str = 'Date', y_label: str = 'Score'):
+        """Updates the chart according to the data given
+
+        Args:
+            x (pd.Series): x coordinates in datetime
+            y (pd.Series): y coordinates in int
+            title (str, optional): title of the graph. Defaults to 'Zetamac History'.
+            x_label (str, optional): title of the graph. Defaults to 'Date'.
+            y_label (str, optional): title of graph. Defaults to 'Score'.
+        """
+        #plot new figure
         self.figure.clear(keep_observers = True)
         plt.plot(x, y)
         plt.xticks(rotation = 45)
-        # ax = plt.gca()
+        
+        #get axes and set limits
+        ax = plt.gca()
+        date_df = pd.DataFrame({'Timestamp': x})
+        ax.set_xlim([date_df.iloc[0]['Timestamp'], date_df.iloc[-1]['Timestamp']])
         # ax.xaxis.set_major_locator(ticker.MultipleLocator(7))
+        
+        #add labels
         plt.xlabel(x_label)
         plt.ylabel(y_label)
         plt.title(title)
+        
+        #draw figure
         self.scatter.draw_idle()
 
 #testing if the update method works as intended
