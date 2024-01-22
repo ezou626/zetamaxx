@@ -12,6 +12,7 @@ class DataContainer():
                 'Timestamp': pd.Series(dtype='datetime64[ns]'),
                 'Score': pd.Series(dtype='int'),
                 'Seconds': pd.Series(dtype='int'),
+                'Ratio': pd.Series(dtype='float'),
                 'Default': pd.Series(dtype='bool')
             })
         
@@ -32,7 +33,7 @@ class DataContainer():
         
         self.data = pd.concat([self.data, 
                                 pd.DataFrame([
-                                   [timestamp, score, seconds, default]
+                                   [timestamp, score, seconds, score/seconds, default]
                                 ], 
                                 columns = self.data.columns)],
                                 ignore_index=True)
