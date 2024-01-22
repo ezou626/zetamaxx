@@ -2,7 +2,7 @@ from datacontainer import DataContainer
 import datetime
 import pandas as pd
 
-datetime_list = [datetime.datetime(2023, 1, i) for i in range(30)]
+datetime_list = [datetime.datetime(2023, 1, i) for i in range(1, 31)]
 score_list = [i for i in range(30)]
 seconds_list = [120 for _ in range(30)]
 ratios_list = [score_list[i]/seconds_list[i] for i in range(30)]
