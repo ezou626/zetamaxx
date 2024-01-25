@@ -2,9 +2,10 @@
 .vscode
 .vscode/
 
-#data file
+#data files
 data.tsv
 test.tsv
+config.json
 
 #test script
 test.py
