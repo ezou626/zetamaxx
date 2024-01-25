@@ -4,7 +4,7 @@ import numpy as np
 import tkinter.ttk as ttk
 
 from chart import Chart
-from datacontainer import DataContainer
+from containers import DataContainer
 from menu import Menu
 
 class App(tk.Tk):
@@ -24,11 +24,11 @@ class App(tk.Tk):
         
         #chart
         self.chart = Chart(self)
-        self.chart.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self.chart.pack(side=tk.TOP, fill=tk.BOTH, expand=True, ipadx=15, ipady=15)
         
         #menu
         self.menu = Menu(self, self.chart, self.data_container)
-        self.menu.pack(fill=tk.X, expand=True)
+        self.menu.pack(fill=tk.X)
 
 #runs the app
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
-from datacontainer import DataContainer
+from containers import DataContainer
 import datetime
 import pandas as pd
+from pandas.testing import assert_frame_equal
 
 datetime_list = [datetime.datetime(2023, 1, i) for i in range(1, 31)]
 score_list = [i for i in range(30)]
@@ -19,7 +20,8 @@ def test_constructor_data():
     initial_df.to_csv('test.tsv', sep='\t', index=False)
     
     data_container = DataContainer('test.tsv')
-    assert initial_df.equals(data_container.data)
+    
+    assert_frame_equal(data_container.data, initial_df)
     
 #test constructor valid data
 def test_constructor_empty():
