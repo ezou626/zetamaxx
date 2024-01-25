@@ -1,5 +1,5 @@
 from chart import Chart
-from datacontainer import DataContainer
+from containers import DataContainer
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -10,7 +10,8 @@ from datetime import datetime
 class EditScoresMenu(tk.Frame):
     """Menu to add scores"""
     
-    def __init__(self, parent: tk.Frame, window: tk.Tk, chart: Chart, data_container: DataContainer):
+    def __init__(self, parent: tk.Frame, window: tk.Tk, chart: Chart, 
+                 data_container: DataContainer):
         """Constructs the widget to edit scores
 
         Args:
@@ -46,7 +47,7 @@ class EditScoresMenu(tk.Frame):
         """Adds new score to data and refreshes chart
 
         """
-        score = self.score_entry.get() #guaranteed to be integer or empty
+        score = int(self.score_entry.get()) #guaranteed to be integer or empty
         if score == "":
             showwarning('Invalid Score', 'Please Enter a Score')
             return
@@ -56,9 +57,9 @@ class EditScoresMenu(tk.Frame):
         #print(score, time, seconds, default)
         
         self.data_container.add_point(time, score, seconds, default)
-        x, y = self.data_container.get_data()
         
-        self.chart.update_chart(x, y)
+        x, y, limits = self.data_container.get_data()
+        self.chart.update_chart(x, y, limits = limits)
         
     @staticmethod
     def validate_input(string):
@@ -74,7 +75,13 @@ class EditScoresMenu(tk.Frame):
     
     def remove_score(self):
         """Removes the last score added (undo)"""
-        pass
+        row = None
+        if not self.data_container.has_last():
+            return
+        row = self.data_container.remove_last()
+        
+        x, y, limits = self.data_container.get_data()
+        self.chart.update_chart(x, y, limits = limits)
 
 class DataDisplayMenu(tk.Frame):
     pass
@@ -95,6 +102,9 @@ class Menu(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.data_container = data_container
         self.chart = chart
+        
+        x, y, limits = self.data_container.get_data()
+        self.chart.update_chart(x, y, limits = limits)
         
         #edit scores menu
         self.edit_score_menu = EditScoresMenu(self, parent, chart, data_container)
