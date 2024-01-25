@@ -18,10 +18,18 @@ class DataContainer():
                 'Default': pd.Series(dtype='bool')
             })
         
+        standard_columns = ['Timestamp', 'Score', 'Seconds', 'Ratio', 'Default']
         try:
-            self.data = pd.read_csv(self.data_file, sep='\t')
+            data = pd.read_csv(self.data_file, sep='\t')
+            
+            #check correct columns
+            if len(set(data.columns.values).union(standard_columns)) == 5:
+                data['Timestamp'] = data['Timestamp'].astype('datetime64[ns]')
+                self.data = data
         except pd.errors.EmptyDataError:
-            pass
+            print("No historical data")
+        except pd.errors.ParserError:
+            print("Error parsing data; please check validity of file")
             
     def add_point(self, timestamp: datetime.datetime, score: int, seconds: int, default: bool):
         """Adds a datapoint to the dataframe representing a test result
@@ -47,7 +55,7 @@ class DataContainer():
         Returns:
             bool: True if there are more elements, False otherwise
         """
-        return len(pd.DataFrame) != 0
+        return len(self.data) != 0
                 
     def remove_last(self) -> Optional[pd.DataFrame]:
         """Removes last row from dataframe
@@ -125,6 +133,9 @@ class DataContainer():
             return None, None, None
         x = pd.to_datetime(df['Timestamp'])
         y = df['Score'] if not ratio else df['Ratio']
-        limits = (df.iloc[0]['Timestamp'] - datetime.timedelta(days=1), 
-                  df.iloc[-1]['Timestamp'] + datetime.timedelta(days=1))
+        timeframe = df.iloc[-1]['Timestamp'] - df.iloc[0]['Timestamp']
+        if len(df) == 1:
+            timeframe = datetime.timedelta(seconds=1)
+        limits = (df.iloc[0]['Timestamp'] - timeframe / 4, 
+                  df.iloc[-1]['Timestamp'] + timeframe / 4)
         return x, y, limits
