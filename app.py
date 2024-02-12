@@ -5,6 +5,7 @@ import tkinter.ttk as ttk
 
 from chart import Chart
 from containers import DataContainer
+from chartcontroller import ChartController
 from menu import Menu
 
 class App(tk.Tk):
@@ -26,8 +27,11 @@ class App(tk.Tk):
         self.chart = Chart(self)
         self.chart.pack(side=tk.TOP, fill=tk.BOTH, expand=True, ipadx=15, ipady=15)
         
+        # chart controller
+        self.chart_controller = ChartController(self.chart, self.data_container)
+        
         #menu
-        self.menu = Menu(self, self.chart, self.data_container)
+        self.menu = Menu(self, self.chart_controller)
         self.menu.pack(fill=tk.X)
 
 #runs the app
