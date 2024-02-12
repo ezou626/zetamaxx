@@ -22,22 +22,27 @@ class EditScoresMenu(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.chart_controller = chart_controller
         
+        # enter score
         self.score_entry = tk.Entry(self, width=25)
         callback = window.register(self.validate_input) #might smell
         self.score_entry.config(validate = 'key', validatecommand = (callback, '%P'))
         self.score_entry.grid(ipady=3, column = 1, row = 1)
         
+        # enter time
         self.seconds_entry = ttk.Combobox(self, values = [30, 60, 120, 300, 600])
         self.seconds_entry.current(2)
         self.seconds_entry.grid(column = 2, row = 1)
         
+        # enter setting
         self.default_entry = ttk.Combobox(self, values = [True, False])
         self.default_entry.current(0)
         self.default_entry.grid(column = 3, row = 1)
         
+        # add score
         self.add_button = tk.Button(self, text = 'Add Score', command = self.add_score)
         self.add_button.grid(column = 4, row = 1)
         
+        # remove score
         self.remove_button = tk.Button(self, text = 'Remove Score', command = self.remove_score)
         self.remove_button.grid(column = 5, row = 1)
         
@@ -76,8 +81,17 @@ class DataDisplayMenu(tk.Frame):
     """Menu to change display settings
     """
     def __init__(self, parent: tk.Tk, chart_controller: ChartController):
+        """Constructs the widget to edit scores
+
+        Args:
+            parent (tk.Frame): parent frame
+            window (tk.Tk): parent window to register command
+            chart_controller (ChartController): object to control display
+        """
         tk.Frame.__init__(self, parent)
         self.chart_controller = chart_controller
+        
+        
 
 class Menu(tk.Frame):
     """Menu widget to contain all of the controls for the chart and data
