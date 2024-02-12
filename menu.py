@@ -91,6 +91,37 @@ class DataDisplayMenu(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.chart_controller = chart_controller
         
+        # time settings
+        self.time_selection = ttk.Combobox(self, 
+                                           values = ['Default', 'Not Default', 'All'], 
+                                           command = self.update_display)
+        self.time_selection.current(0)
+        self.time_selection.grid(column = 1, row = 1)
+        
+        # problem settings
+        self.setting_selection = ttk.Combobox(self, 
+                                           values = ['Default', 'Not Default', 'All'], 
+                                           command = self.update_display)
+        self.setting_selection.current(0)
+        self.setting_selection.grid(column = 2, row = 1)
+        
+        # ratio settings
+        self.ratio_selection = ttk.Combobox(self, 
+                                           values = ['Values', 'Ratio'], 
+                                           command = self.update_display)
+        self.ratio_selection.current(0)
+        self.ratio_selection.grid(column = 3, row = 1)
+        
+    def update_display(self) -> None:
+        to_bool = {
+            'Default': True,
+            'Not Default': False,
+            'All': None
+        }
+        time = to_bool[self.time_selection.get()] #guaranteed to be integer and not empty
+        settings = to_bool[self.setting_selection.get()] #guaranteed to be boolean and not empty
+        ratio = True if self.ratio_selection.get() == 'Ratio' else False
+        self.chart_controller.set_display_options(time, settings, ratio)
         
 
 class Menu(tk.Frame):
@@ -116,5 +147,5 @@ class Menu(tk.Frame):
         self.edit_score_menu.pack()
         
         # #data display menu
-        # self.data_display_menu = DataDisplayMenu(self, parent, chart, data_container)
-        # self.data_display_menu.pack()
+        self.data_display_menu = DataDisplayMenu(self, parent, chart_controller)
+        self.data_display_menu.pack()
