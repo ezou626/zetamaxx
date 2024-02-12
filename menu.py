@@ -1,5 +1,6 @@
 from chart import Chart
 from containers import DataContainer
+from chartcontroller import ChartController
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -10,19 +11,16 @@ from datetime import datetime
 class EditScoresMenu(tk.Frame):
     """Menu to add scores"""
     
-    def __init__(self, parent: tk.Frame, window: tk.Tk, chart: Chart, 
-                 data_container: DataContainer):
+    def __init__(self, parent: tk.Frame, window: tk.Tk, chart_controller: ChartController):
         """Constructs the widget to edit scores
 
         Args:
             parent (tk.Frame): parent frame
             window (tk.Tk): parent window to register command
-            chart (Chart): application chart
-            data_container (DataContainer): wrapper class for data
+            chart_controller (ChartController): object to control display
         """
         tk.Frame.__init__(self, parent)
-        self.data_container = data_container
-        self.chart = chart
+        self.chart_controller = chart_controller
         
         self.score_entry = tk.Entry(self, width=25)
         callback = window.register(self.validate_input) #might smell
@@ -56,11 +54,12 @@ class EditScoresMenu(tk.Frame):
         default = bool(self.default_entry.get()) #guaranteed to be boolean and not empty
         #print(score, time, seconds, default)
         
-        self.data_container.add_point(time, score, seconds, default)
+        self.chart_controller.add_point(time, score, seconds, default)
         
-        x, y, limits = self.data_container.get_data()
-        self.chart.update_chart(x, y, limits = limits)
-        
+    def remove_score(self):
+        """Removes the last score added (undo)"""
+        self.chart_controller.remove_point()
+
     @staticmethod
     def validate_input(string):
         """Checks if the string is entirely composed of digits
@@ -72,26 +71,20 @@ class EditScoresMenu(tk.Frame):
             bool: True if is digits, False otherwise
         """
         return string == "" or string.isdigit()
-    
-    def remove_score(self):
-        """Removes the last score added (undo)"""
-        row = None
-        if not self.data_container.has_last():
-            return
-        row = self.data_container.remove_last()
-        
-        x, y, limits = self.data_container.get_data()
-        self.chart.update_chart(x, y, limits = limits)
 
 class DataDisplayMenu(tk.Frame):
-    pass
+    """Menu to change display settings
+    """
+    def __init__(self, parent: tk.Tk, chart_controller: ChartController):
+        tk.Frame.__init__(self, parent)
+        self.chart_controller = chart_controller
 
 class Menu(tk.Frame):
     """Menu widget to contain all of the controls for the chart and data
 
     Stores references to Chart and DataContainer to consume their APIs
     """
-    def __init__(self, parent: tk.Tk, chart: Chart, data_container: DataContainer):
+    def __init__(self, parent: tk.Tk, chart_controller: ChartController):
         """Constructs the Menu widget
 
         Args:
@@ -100,14 +93,12 @@ class Menu(tk.Frame):
             data_container (DataContainer): wrapper class for data
         """
         tk.Frame.__init__(self, parent)
-        self.data_container = data_container
-        self.chart = chart
+        self.chart_controller = chart_controller
         
-        x, y, limits = self.data_container.get_data()
-        self.chart.update_chart(x, y, limits = limits)
+        chart_controller.update_chart()
         
         #edit scores menu
-        self.edit_score_menu = EditScoresMenu(self, parent, chart, data_container)
+        self.edit_score_menu = EditScoresMenu(self, parent, chart_controller)
         self.edit_score_menu.pack()
         
         # #data display menu

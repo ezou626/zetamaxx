@@ -48,7 +48,7 @@ class ChartController():
             raise ValueError('Must be of type Optional[bool]')
         self.ratio = new_value
         
-    def _update_chart(self):
+    def update_chart(self):
         """Utility method to update chart with query
         """
         x, y, limits = self.data_container.get_data(self.default_time,
@@ -58,14 +58,14 @@ class ChartController():
         
     def add_point(self, time, score, seconds, default):
         self.data_container.add_point(time, score, seconds, default)
-        self._update_chart()
+        self.update_chart()
         
     def remove_point(self):
         row = None
         if not self.data_container.has_last():
             return
         row = self.data_container.remove_last()
-        self._update_chart()
+        self.update_chart()
         # in the future, put row onto the output message box
         return row
         
