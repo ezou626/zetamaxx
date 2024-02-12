@@ -1,3 +1,4 @@
+from typing import Optional
 from chart import Chart
 from containers import DataContainer
 
@@ -18,36 +19,6 @@ class ChartController():
         self.default_settings = True
         self.ratio = False
         
-    @property
-    def default_time(self):
-        return self.default_time
-    
-    @default_time.setter
-    def default_time(self, new_value):
-        if (new_value and type(new_value) != bool):
-            raise ValueError('Must be of type Optional[bool]')
-        self.default_time = new_value
-        
-    @property
-    def default_settings(self):
-        return self.default_settings
-    
-    @default_settings.setter
-    def default_settings(self, new_value):
-        if (new_value and type(new_value) != bool):
-            raise ValueError('Must be of type Optional[bool]')
-        self.default_settings = new_value
-        
-    @property
-    def ratio(self):
-        return self.ratio
-    
-    @ratio.setter
-    def ratio(self, new_value):
-        if (new_value and type(new_value) != bool):
-            raise ValueError('Must be of type Optional[bool]')
-        self.ratio = new_value
-        
     def update_chart(self):
         """Utility method to update chart with query
         """
@@ -56,16 +27,24 @@ class ChartController():
                                                     self.ratio)
         self.chart.update_chart(x, y, limits)
         
-    def add_point(self, time, score, seconds, default):
+    def set_display_options(self, 
+                            time: Optional[bool], 
+                            settings: Optional[bool], 
+                            ratio: bool) -> None:
+        self.default_time = time
+        self.default_settings = settings
+        self.ratio = ratio
+        self.update_chart()
+        
+    def add_point(self, time, score, seconds, default) -> None:
         self.data_container.add_point(time, score, seconds, default)
         self.update_chart()
         
-    def remove_point(self):
+    def remove_point(self) -> None:
         row = None
         if not self.data_container.has_last():
             return
         row = self.data_container.remove_last()
         self.update_chart()
         # in the future, put row onto the output message box
-        return row
         
