@@ -29,12 +29,12 @@ class EditScoresMenu(tk.Frame):
         self.score_entry.grid(ipady=3, column = 1, row = 1)
         
         # enter time
-        self.seconds_entry = ttk.Combobox(self, values = [30, 60, 120, 300, 600])
+        self.seconds_entry = ttk.Combobox(self, state="readonly", values = [30, 60, 120, 300, 600])
         self.seconds_entry.current(2)
         self.seconds_entry.grid(column = 2, row = 1)
         
         # enter setting
-        self.default_entry = ttk.Combobox(self, values = [True, False])
+        self.default_entry = ttk.Combobox(self, state="readonly", values = [True, False])
         self.default_entry.current(0)
         self.default_entry.grid(column = 3, row = 1)
         
