@@ -74,6 +74,7 @@ class DataContainer():
         self.data.to_csv(self.data_file, sep='\t', index=False)
         return last_row
     
+    #TODO: remove default values
     def get_data(self, default_time: Optional[bool] = True, default_settings: Optional[bool] = True, 
                  ratio: bool = False) -> tuple[Optional[pd.Series], 
                                          Optional[pd.Series], 
