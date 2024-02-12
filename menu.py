@@ -92,27 +92,27 @@ class DataDisplayMenu(tk.Frame):
         self.chart_controller = chart_controller
         
         # time settings
-        self.time_selection = ttk.Combobox(self, 
-                                           values = ['Default', 'Not Default', 'All'], 
-                                           command = self.update_display)
+        self.time_selection = ttk.Combobox(self, state="readonly",
+                                           values = ['Default', 'Not Default', 'All'])
         self.time_selection.current(0)
+        self.time_selection.bind("<<ComboboxSelected>>", self.update_display)
         self.time_selection.grid(column = 1, row = 1)
         
         # problem settings
-        self.setting_selection = ttk.Combobox(self, 
-                                           values = ['Default', 'Not Default', 'All'], 
-                                           command = self.update_display)
+        self.setting_selection = ttk.Combobox(self, state="readonly",
+                                           values = ['Default', 'Not Default', 'All'])
         self.setting_selection.current(0)
+        self.setting_selection.bind("<<ComboboxSelected>>", self.update_display)
         self.setting_selection.grid(column = 2, row = 1)
         
         # ratio settings
-        self.ratio_selection = ttk.Combobox(self, 
-                                           values = ['Values', 'Ratio'], 
-                                           command = self.update_display)
+        self.ratio_selection = ttk.Combobox(self, state="readonly",
+                                           values = ['Values', 'Ratio'])
         self.ratio_selection.current(0)
+        self.ratio_selection.bind("<<ComboboxSelected>>", self.update_display)
         self.ratio_selection.grid(column = 3, row = 1)
         
-    def update_display(self) -> None:
+    def update_display(self, event) -> None:
         to_bool = {
             'Default': True,
             'Not Default': False,
@@ -147,5 +147,5 @@ class Menu(tk.Frame):
         self.edit_score_menu.pack()
         
         # #data display menu
-        self.data_display_menu = DataDisplayMenu(self, parent, chart_controller)
+        self.data_display_menu = DataDisplayMenu(self, chart_controller)
         self.data_display_menu.pack()
