@@ -75,8 +75,8 @@ class DataContainer():
         return last_row
     
     #TODO: remove default values
-    def get_data(self, default_time: Optional[bool] = True, default_settings: Optional[bool] = True, 
-                 ratio: bool = False) -> tuple[Optional[pd.Series], 
+    def get_data(self, default_time: Optional[bool], default_settings: Optional[bool], 
+                 ratio: bool) -> tuple[Optional[pd.Series], 
                                          Optional[pd.Series], 
                                          Optional[tuple[datetime.datetime, 
                                                         datetime.datetime]]]:
@@ -131,7 +131,7 @@ class DataContainer():
                 x series, y series, time range
         """
         if len(df) == 0:
-            return None, None, None
+            return [], [], [datetime.date(2007, 12, 5), datetime.date(2007, 12, 5)]
         x = pd.to_datetime(df['Timestamp'])
         y = df['Score'] if not ratio else df['Ratio']
         timeframe = df.iloc[-1]['Timestamp'] - df.iloc[0]['Timestamp']
