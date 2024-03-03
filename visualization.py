@@ -1,7 +1,8 @@
 import tkinter as tk
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
+import matplotlib.dates as mdates
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib
 import datetime
@@ -41,6 +42,14 @@ class Chart(tk.Frame):
         ax = plt.gca()
         ax.set_xlim(limits)
         # ax.xaxis.set_major_locator(ticker.MultipleLocator(7))
+        
+        #line of best fit
+        x = mdates.date2num(x)
+        fit = np.polyfit(x, y, 1)
+        line = np.poly1d(fit)
+        test_x = np.linspace(x[0], x[-1], 100)
+        dates = mdates.num2date(test_x)
+        plt.plot(dates, line(test_x))
         
         #add labels
         plt.xlabel(x_label)
