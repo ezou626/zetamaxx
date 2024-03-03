@@ -2,6 +2,14 @@ import pandas as pd
 import datetime
 from typing import Optional
 
+datatypes = {
+                'Timestamp': pd.Series(dtype='datetime64[ns]'),
+                'Score': pd.Series(dtype='int'),
+                'Seconds': pd.Series(dtype='int'),
+                'Ratio': pd.Series(dtype='float'),
+                'Default': pd.Series(dtype='bool')
+            }
+
 class DataContainer():
     """Wrapper for pandas dataframe involving the data"""
     
@@ -10,15 +18,9 @@ class DataContainer():
         
         self.data_file = data_file
         
-        self.data = pd.DataFrame({
-                'Timestamp': pd.Series(dtype='datetime64[ns]'),
-                'Score': pd.Series(dtype='int'),
-                'Seconds': pd.Series(dtype='int'),
-                'Ratio': pd.Series(dtype='float'),
-                'Default': pd.Series(dtype='bool')
-            })
+        self.data = pd.DataFrame(datatypes)
         
-        standard_columns = ['Timestamp', 'Score', 'Seconds', 'Ratio', 'Default']
+        standard_columns = datatypes.keys()
         try:
             data = pd.read_csv(self.data_file, sep='\t')
             
@@ -41,12 +43,11 @@ class DataContainer():
             default (bool): True if default settings, False otherwise
         """
         
-        self.data = pd.concat([self.data, 
-                                pd.DataFrame([
-                                   [timestamp, score, seconds, score/seconds, default]
-                                ], 
-                                columns = self.data.columns)],
-                                ignore_index=True)
+        new_row = pd.DataFrame([[timestamp, score, seconds, score/seconds, default]], 
+                                columns = self.data.columns)
+        for column, example in datatypes.items():
+            new_row[column] = new_row[column].astype(example.dtype)
+        self.data = pd.concat([self.data, new_row], ignore_index=True)
         self.data.to_csv(self.data_file, sep='\t', index=False)
         
     def has_last(self) -> bool:
