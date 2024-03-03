@@ -1,12 +1,12 @@
 from typing import Optional
-from visualization import Chart
+from visualization import Chart, Stats
 from data_container import DataContainer
 from datetime import datetime
 
 class Controller():
     """Controls the updates of the chart and other display widgets, stores state"""
     
-    def __init__(self, chart: Chart, data_container: DataContainer):
+    def __init__(self, chart: Chart, stats: Stats, data_container: DataContainer):
         """Sets up initial settings
 
         Args:
@@ -15,6 +15,7 @@ class Controller():
         """
         
         self.chart = chart
+        self.stats = stats
         self.data_container = data_container
 
         self.default_time = True
@@ -28,6 +29,10 @@ class Controller():
                                                     self.default_settings,
                                                     self.ratio)
         self.chart.update_chart(x, y, limits)
+        if y:
+            self.stats.update_stats(y.max(), y.mean())
+        else:
+            self.stats.update_stats('-', '-')
         
     def set_display_options(self, 
                             time: Optional[bool], 

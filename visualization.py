@@ -25,7 +25,7 @@ class Chart(tk.Frame):
         self.scatter.get_tk_widget().pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True, pady=5)
         
     def update_chart(self, x: pd.Series, y: pd.Series, limits: tuple[datetime.datetime, datetime.datetime],
-                     title: str = 'Zetamac History', x_label: str = 'Date', y_label: str = 'Score'):
+                     title: str = 'Zetamac History', x_label: str = 'Time', y_label: str = 'Score'):
         """Updates the chart according to the data given
 
         Args:
@@ -65,6 +65,7 @@ class Chart(tk.Frame):
         plt.title(title)
         
         #draw figure
+        plt.tight_layout()
         self.scatter.draw_idle()
         
 class Stats(tk.Frame):
@@ -78,8 +79,15 @@ class Stats(tk.Frame):
         """
         tk.Frame.__init__(self, parent)
         self.high = tk.Label(self)
+        self.high.pack()
         self.average = tk.Label(self)
+        self.average.pack()
         
+    def update_stats(self, maximum, average):
+        self.high.config(text = f'High: {maximum}')
+        # self.update_idletasks()
+        self.average.config(text = f'Average: {average}')
+        # self.update_idletasks()
 
 #testing if the update method works as intended
 if __name__ == '__main__':
