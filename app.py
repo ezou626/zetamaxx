@@ -27,7 +27,6 @@ class App(tk.Tk):
         self.menu = Menu(self, self.controller)
         self.menu.pack(fill=tk.X)
 
-#runs the app
 if __name__ == "__main__":
     app = App()
     app.mainloop()
