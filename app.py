@@ -6,11 +6,11 @@ from chartcontroller import ChartController
 from menu import Menu
 
 class App(tk.Tk):
-    """Wrapper window for application
-    """
+    """Wrapper window for application"""
+    
     def __init__(self):
-        """Create the app window
-        """
+        """Create the app window"""
+        
         tk.Tk.__init__(self)
         self.state('zoomed') #fullscreen
         self.protocol("WM_DELETE_WINDOW", self.quit) #end process on close
