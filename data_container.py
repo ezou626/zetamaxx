@@ -94,21 +94,21 @@ class DataContainer():
         selected_data: pd.DataFrame = None
         match (default_settings, default_time): # definitely smells
             case (True, True):
-                selected_data = self.data[(self.data['Default'] == default_time) & 
+                selected_data = self.data[(self.data['Default'] == True) & 
                                       (self.data['Seconds'] == 120)]
             case (True, False):
-                selected_data = self.data[(self.data['Default'] == default_time) & 
+                selected_data = self.data[(self.data['Default'] == True) & 
                                       (self.data['Seconds'] != 120)]
             case (True, None):
-                selected_data = self.data[(self.data['Default'] == default_time)]
+                selected_data = self.data[(self.data['Default'] == True)]
             case (False, True):
-                selected_data = self.data[(self.data['Default'] != default_time) & 
+                selected_data = self.data[(self.data['Default'] != True) & 
                                       (self.data['Seconds'] == 120)]
             case (False, False):
-                selected_data = self.data[(self.data['Default'] != default_time) & 
+                selected_data = self.data[(self.data['Default'] != True) & 
                                       (self.data['Seconds'] != 120)]
             case (False, None):
-                selected_data = self.data[(self.data['Default'] != default_time)]
+                selected_data = self.data[(self.data['Default'] != True)]
             case (None, True):
                 selected_data = self.data[(self.data['Seconds'] == 120)]
             case (None, False):
@@ -131,7 +131,7 @@ class DataContainer():
                 x series, y series, time range
         """
         if len(df) == 0:
-            return [], [], [datetime.date(2007, 12, 5), datetime.date(2007, 12, 5)]
+            return [], [], [datetime.date(2007, 12, 5), datetime.date(2007, 12, 7)]
         x = pd.to_datetime(df['Timestamp'])
         y = df['Score'] if not ratio else df['Ratio']
         timeframe = df.iloc[-1]['Timestamp'] - df.iloc[0]['Timestamp']
