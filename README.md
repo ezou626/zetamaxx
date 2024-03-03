@@ -12,6 +12,7 @@ Built with pandas, matplotlib, tkinter, and immense struggle
     - Menu borders
     - Text sizing
     - Widget placement
+    - Show removed rows
 - Deploy app with pyinstaller and Github releases
     - Possibility of installer
 - Chrome/Firefox extension
