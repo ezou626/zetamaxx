@@ -1,7 +1,4 @@
 import tkinter as tk
-import pandas as pd
-import numpy as np
-import tkinter.ttk as ttk
 
 from chart import Chart
 from containers import DataContainer
