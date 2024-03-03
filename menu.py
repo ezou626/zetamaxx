@@ -148,7 +148,7 @@ class Menu(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         
-        controller.update_chart()
+        controller.update_displays()
         
         #edit scores menu
         self.edit_score_menu = EditScoresMenu(self, parent, controller)
