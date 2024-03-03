@@ -49,6 +49,20 @@ class Chart(tk.Frame):
         
         #draw figure
         self.scatter.draw_idle()
+        
+class Stats(tk.Frame):
+    """Displays stats for the displayed data"""
+    
+    def __init__(self, parent):
+        """Initializes the stats window, creating the figure and widget
+
+        Args:
+            parent (tk.Tk): parent widget
+        """
+        tk.Frame.__init__(self, parent)
+        self.high = tk.Label(self)
+        self.average = tk.Label(self)
+        
 
 #testing if the update method works as intended
 if __name__ == '__main__':
