@@ -176,4 +176,4 @@ class Menu(tk.Frame):
         self.edit_score_menu.grid(column = 1, row = 1, sticky="NSEW")
         
         self.data_display_menu = DataDisplayMenu(self, controller)
-        self.data_display_menu.grid(column = 2, row = 1, sticky="NSEW")
+        self.data_display_menu.grid(column = 2, row = 1, sticky="NSEW", padx=15)

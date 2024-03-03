@@ -43,7 +43,7 @@ class App(tk.Tk):
         text_frame.grid_columnconfigure(2, weight=1)
         chart.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True, 
                         ipadx=15, padx = 15)
-        text_frame.pack(side = tk.TOP, fill=tk.X)
+        text_frame.pack(side = tk.TOP, fill=tk.X, padx = 15)
         
         self.state('zoomed')
 
