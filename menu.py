@@ -1,6 +1,6 @@
 from visualization import Chart
 from data_container import DataContainer
-from chartcontroller import ChartController
+from controller import ChartController
 
 import tkinter as tk
 import tkinter.ttk as ttk

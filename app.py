@@ -2,7 +2,7 @@ import tkinter as tk
 
 from visualization import Chart
 from data_container import DataContainer
-from chartcontroller import ChartController
+from controller import ChartController
 from menu import Menu
 
 class App(tk.Tk):
