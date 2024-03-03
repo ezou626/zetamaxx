@@ -12,23 +12,30 @@ class App(tk.Tk):
         """Create the app window"""
         
         tk.Tk.__init__(self)
-        self.state('zoomed') #fullscreen
         self.protocol("WM_DELETE_WINDOW", self.quit) #end process on close
         self.title("Zetamaxx")
         self.wm_title("Zetamaxx")
         
-        self.data_container = DataContainer()
-        self.chart = Chart(self)
-        self.stats = Stats(self)
+        photo = tk.PhotoImage(file = 'icon.png')
+        self.iconphoto(False, photo)
+        self.wm_iconphoto(False, photo)
         
-        self.controller = Controller(self.chart, self.stats, self.data_container)
+        text_frame = tk.Frame(self)
+        data_container = DataContainer()
+        chart = Chart(self)
+        stats = Stats(text_frame)
+        controller = Controller(chart, stats, data_container)
+        menu = Menu(text_frame, controller)
         
-        self.menu = Menu(self, self.controller)
-        
-        self.menu.pack(fill=tk.X, ipadx=15, ipady=15, padx = 15, pady = 15)
-        self.stats.pack(fill = tk.X, ipadx=15, ipady=15)
-        self.chart.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True, 
+        menu.grid(column = 1, row = 1, sticky='NSEW')
+        stats.grid(column = 2, row = 1, sticky='NSEW')
+        text_frame.grid_columnconfigure(1, weight=2)
+        text_frame.grid_columnconfigure(2, weight=1)
+        chart.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True, 
                         ipadx=15, padx = 15)
+        text_frame.pack(side = tk.TOP, fill=tk.X)
+        
+        self.state('zoomed')
 
 if __name__ == "__main__":
     app = App()
