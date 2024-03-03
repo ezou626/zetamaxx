@@ -1,6 +1,8 @@
 from visualization import Chart
 from data_container import DataContainer
 from controller import Controller
+from get_timezone import local_tz, local_pytz
+from pytz import utc
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -53,7 +55,9 @@ class EditScoresMenu(tk.Frame):
         if score == "":
             showwarning('Invalid Score', 'Please Enter a Score')
             return
-        time = datetime.now()
+        local_dt = datetime.now(tz=local_tz)
+        utc_dt = local_dt.astimezone(utc)
+        time = utc_dt.replace(tzinfo=None)
         seconds = int(self.seconds_entry.get()) #guaranteed to be integer and not empty
         default = bool(self.default_entry.get()) #guaranteed to be boolean and not empty
         #print(score, time, seconds, default)

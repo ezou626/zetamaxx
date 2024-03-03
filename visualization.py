@@ -7,6 +7,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib
 import datetime
 matplotlib.use("TkAgg")
+from get_timezone import local_tz, local_pytz
+matplotlib.rcParams.update({'timezone': local_tz.key})
 
 class Chart(tk.Frame):
     """Chart widget that displays data and refreshes upon update"""
@@ -35,21 +37,27 @@ class Chart(tk.Frame):
         """
         #plot new figure
         self.figure.clear(keep_observers = True)
-        plt.plot(x, y, '-o')
-        plt.xticks(rotation = 45)
+        if len(x) > 0:
+            x_converted = x.dt.tz_localize('UTC').dt.tz_convert(local_tz)
+            plt.plot_date(x_converted, y, '-o', tz=local_pytz)
+            plt.xticks(rotation = 45)
         
         #get axes and set limits
         ax = plt.gca()
-        ax.set_xlim(limits)
-        # ax.xaxis.set_major_locator(ticker.MultipleLocator(7))
+        if type(limits[0]) != datetime.date:
+            ax.xaxis_date(local_tz)
+            ax.set_xlim([t.tz_localize('UTC').tz_convert(local_tz) for t in limits])
+            ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter('%d/%m/%y %H:%M', tz=local_tz))
         
         #line of best fit
-        x = mdates.date2num(x)
-        fit = np.polyfit(x, y, 1)
-        line = np.poly1d(fit)
-        test_x = np.linspace(x[0], x[-1], 100)
-        dates = mdates.num2date(test_x)
-        plt.plot(dates, line(test_x))
+        if len(x) > 1:
+            x = mdates.date2num(x)
+            fit = np.polyfit(x, y, 1)
+            line = np.poly1d(fit)
+            test_x = np.linspace(x[0], x[-1], 100)
+            dates = mdates.num2date(test_x)
+            converted_dates = [date.astimezone(local_tz) for date in dates]
+            plt.plot_date(converted_dates, line(test_x), '-', tz=local_pytz)
         
         #add labels
         plt.xlabel(x_label)
