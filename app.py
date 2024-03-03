@@ -5,6 +5,16 @@ from data_container import DataContainer
 from controller import Controller
 from menu import Menu
 
+import os, sys
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 class App(tk.Tk):
     """Wrapper window for application"""
     
@@ -16,7 +26,7 @@ class App(tk.Tk):
         self.title("Zetamaxx")
         self.wm_title("Zetamaxx")
         
-        photo = tk.PhotoImage(file = 'icon.png')
+        photo = tk.PhotoImage(file = resource_path('icon.png'))
         self.iconphoto(False, photo)
         self.wm_iconphoto(False, photo)
         
