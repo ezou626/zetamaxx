@@ -3,7 +3,7 @@ from visualization import Chart
 from data_container import DataContainer
 from datetime import datetime
 
-class ChartController():
+class Controller():
     """Controls the updates of the chart and other display widgets, stores state"""
     
     def __init__(self, chart: Chart, data_container: DataContainer):

@@ -1,6 +1,6 @@
 from visualization import Chart
 from data_container import DataContainer
-from controller import ChartController
+from controller import Controller
 
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -11,16 +11,16 @@ from datetime import datetime
 class EditScoresMenu(tk.Frame):
     """Menu to add scores"""
     
-    def __init__(self, parent: tk.Frame, window: tk.Tk, chart_controller: ChartController):
+    def __init__(self, parent: tk.Frame, window: tk.Tk, controller: Controller):
         """Constructs the widget to edit scores
 
         Args:
             parent (tk.Frame): parent frame
             window (tk.Tk): parent window to register command
-            chart_controller (ChartController): object to control display
+            controller (Controller): object to control display
         """
         tk.Frame.__init__(self, parent)
-        self.chart_controller = chart_controller
+        self.controller = controller
         
         # enter score
         self.score_entry = tk.Entry(self, width=25)
@@ -58,11 +58,11 @@ class EditScoresMenu(tk.Frame):
         default = bool(self.default_entry.get()) #guaranteed to be boolean and not empty
         #print(score, time, seconds, default)
         
-        self.chart_controller.add_point(time, int(score), seconds, default)
+        self.controller.add_point(time, int(score), seconds, default)
         
     def remove_score(self):
         """Removes the last score added (undo)"""
-        self.chart_controller.remove_point()
+        self.controller.remove_point()
 
     @staticmethod
     def validate_input(string):
@@ -79,16 +79,16 @@ class EditScoresMenu(tk.Frame):
 class DataDisplayMenu(tk.Frame):
     """Menu to change display settings"""
     
-    def __init__(self, parent: tk.Tk, chart_controller: ChartController):
+    def __init__(self, parent: tk.Tk, controller: Controller):
         """Constructs the widget to edit scores
 
         Args:
             parent (tk.Frame): parent frame
             window (tk.Tk): parent window to register command
-            chart_controller (ChartController): object to control display
+            controller (Controller): object to control display
         """
         tk.Frame.__init__(self, parent)
-        self.chart_controller = chart_controller
+        self.controller = controller
         
         # time settings
         self.time_selection = ttk.Combobox(self, state="readonly",
@@ -125,7 +125,7 @@ class DataDisplayMenu(tk.Frame):
         time = time_to_bool[self.time_selection.get()]
         settings = settings_to_bool[self.setting_selection.get()]
         ratio = True if self.ratio_selection.get() == 'Ratio' else False
-        self.chart_controller.set_display_options(time, settings, ratio)
+        self.controller.set_display_options(time, settings, ratio)
         
 
 class Menu(tk.Frame):
@@ -133,7 +133,7 @@ class Menu(tk.Frame):
 
     Stores references to Chart and DataContainer to consume their APIs
     """
-    def __init__(self, parent: tk.Tk, chart_controller: ChartController):
+    def __init__(self, parent: tk.Tk, controller: Controller):
         """Constructs the Menu widget
 
         Args:
@@ -142,14 +142,14 @@ class Menu(tk.Frame):
             data_container (DataContainer): wrapper class for data
         """
         tk.Frame.__init__(self, parent)
-        self.chart_controller = chart_controller
+        self.controller = controller
         
-        chart_controller.update_chart()
+        controller.update_chart()
         
         #edit scores menu
-        self.edit_score_menu = EditScoresMenu(self, parent, chart_controller)
+        self.edit_score_menu = EditScoresMenu(self, parent, controller)
         self.edit_score_menu.pack()
         
         # #data display menu
-        self.data_display_menu = DataDisplayMenu(self, chart_controller)
+        self.data_display_menu = DataDisplayMenu(self, controller)
         self.data_display_menu.pack()

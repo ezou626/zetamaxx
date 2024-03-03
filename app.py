@@ -2,7 +2,7 @@ import tkinter as tk
 
 from visualization import Chart
 from data_container import DataContainer
-from controller import ChartController
+from controller import Controller
 from menu import Menu
 
 class App(tk.Tk):
@@ -17,18 +17,14 @@ class App(tk.Tk):
         self.title("Zetamaxx")
         self.wm_title("Zetamaxx")
         
-        #data
         self.data_container = DataContainer()
         
-        #chart
         self.chart = Chart(self)
         self.chart.pack(side=tk.TOP, fill=tk.BOTH, expand=True, ipadx=15, ipady=15)
         
-        # chart controller
-        self.chart_controller = ChartController(self.chart, self.data_container)
+        self.controller = Controller(self.chart, self.data_container)
         
-        #menu
-        self.menu = Menu(self, self.chart_controller)
+        self.menu = Menu(self, self.controller)
         self.menu.pack(fill=tk.X)
 
 #runs the app
