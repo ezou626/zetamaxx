@@ -22,14 +22,14 @@ class Controller():
         self.default_settings = True
         self.ratio = False
         
-    def update_chart(self):
+    def update_displays(self):
         """Update chart with current display settings"""
         
         x, y, limits = self.data_container.get_data(self.default_time,
                                                     self.default_settings,
                                                     self.ratio)
         self.chart.update_chart(x, y, limits)
-        if y:
+        if len(y) != 0:
             self.stats.update_stats(y.max(), y.mean())
         else:
             self.stats.update_stats('-', '-')
@@ -49,7 +49,7 @@ class Controller():
         self.default_time = time
         self.default_settings = settings
         self.ratio = ratio
-        self.update_chart()
+        self.update_displays()
         
     def add_point(self, time: datetime, score: int, seconds: int, default: bool) -> None:
         """Adds a datapoint to data container and update chart
@@ -62,7 +62,7 @@ class Controller():
         """
         
         self.data_container.add_point(time, score, seconds, default)
-        self.update_chart()
+        self.update_displays()
         
     def remove_point(self) -> None:
         """Removes last data entry if it exists added and updates chart"""
@@ -71,6 +71,6 @@ class Controller():
         if not self.data_container.has_last():
             return
         row = self.data_container.remove_last()
-        self.update_chart()
+        self.update_displays()
         # in the future, put row onto the output message box
         
