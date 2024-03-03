@@ -49,7 +49,7 @@ class EditScoresMenu(tk.Frame):
     def add_score(self):
         """Adds new score to data and refreshes chart"""
         
-        score = int(self.score_entry.get()) #guaranteed to be integer or empty
+        score = self.score_entry.get() #guaranteed to be integer or empty
         if score == "":
             showwarning('Invalid Score', 'Please Enter a Score')
             return
@@ -58,7 +58,7 @@ class EditScoresMenu(tk.Frame):
         default = bool(self.default_entry.get()) #guaranteed to be boolean and not empty
         #print(score, time, seconds, default)
         
-        self.chart_controller.add_point(time, score, seconds, default)
+        self.chart_controller.add_point(time, int(score), seconds, default)
         
     def remove_score(self):
         """Removes the last score added (undo)"""
@@ -92,7 +92,7 @@ class DataDisplayMenu(tk.Frame):
         
         # time settings
         self.time_selection = ttk.Combobox(self, state="readonly",
-                                           values = ['Default', 'Not Default', 'All'])
+                                           values = ['120s', 'Other', 'All'])
         self.time_selection.current(0)
         self.time_selection.bind("<<ComboboxSelected>>", self.update_display)
         self.time_selection.grid(column = 1, row = 1)
@@ -112,13 +112,18 @@ class DataDisplayMenu(tk.Frame):
         self.ratio_selection.grid(column = 3, row = 1)
         
     def update_display(self, event) -> None:
-        to_bool = {
+        time_to_bool = {
+            '120s': True,
+            'Other': False,
+            'All': None
+        }
+        settings_to_bool = {
             'Default': True,
             'Not Default': False,
             'All': None
         }
-        time = to_bool[self.time_selection.get()] #guaranteed to be integer and not empty
-        settings = to_bool[self.setting_selection.get()] #guaranteed to be boolean and not empty
+        time = time_to_bool[self.time_selection.get()]
+        settings = settings_to_bool[self.setting_selection.get()]
         ratio = True if self.ratio_selection.get() == 'Ratio' else False
         self.chart_controller.set_display_options(time, settings, ratio)
         
