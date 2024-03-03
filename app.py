@@ -1,7 +1,7 @@
 import tkinter as tk
 
-from chart import Chart
-from containers import DataContainer
+from visualization import Chart
+from data_container import DataContainer
 from chartcontroller import ChartController
 from menu import Menu
 

@@ -1,5 +1,5 @@
-from chart import Chart
-from containers import DataContainer
+from visualization import Chart
+from data_container import DataContainer
 from chartcontroller import ChartController
 
 import tkinter as tk
@@ -47,9 +47,8 @@ class EditScoresMenu(tk.Frame):
         self.remove_button.grid(column = 5, row = 1)
         
     def add_score(self):
-        """Adds new score to data and refreshes chart
-
-        """
+        """Adds new score to data and refreshes chart"""
+        
         score = int(self.score_entry.get()) #guaranteed to be integer or empty
         if score == "":
             showwarning('Invalid Score', 'Please Enter a Score')
@@ -78,8 +77,8 @@ class EditScoresMenu(tk.Frame):
         return string == "" or string.isdigit()
 
 class DataDisplayMenu(tk.Frame):
-    """Menu to change display settings
-    """
+    """Menu to change display settings"""
+    
     def __init__(self, parent: tk.Tk, chart_controller: ChartController):
         """Constructs the widget to edit scores
 
