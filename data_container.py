@@ -1,6 +1,7 @@
 import pandas as pd
 import datetime
 from typing import Optional
+import os
 
 datatypes = {
                 'Timestamp': pd.Series(dtype='datetime64[ns]'),
@@ -21,6 +22,8 @@ class DataContainer():
         self.data = pd.DataFrame(datatypes)
         
         standard_columns = datatypes.keys()
+        if not os.path.exists('data.tsv'):
+            return
         try:
             data = pd.read_csv(self.data_file, sep='\t')
             
