@@ -30,7 +30,7 @@ class Controller():
                                                     self.ratio)
         self.chart.update_chart(x, y, limits)
         if len(y) != 0:
-            self.stats.update_stats(y.max(), y.mean())
+            self.stats.update_stats(y.max(), round(y.mean(), 3))
         else:
             self.stats.update_stats('-', '-')
         
