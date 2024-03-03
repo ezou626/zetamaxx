@@ -85,9 +85,7 @@ class Stats(tk.Frame):
         
     def update_stats(self, maximum, average):
         self.high.config(text = f'High: {maximum}')
-        # self.update_idletasks()
         self.average.config(text = f'Average: {average}')
-        # self.update_idletasks()
 
 #testing if the update method works as intended
 if __name__ == '__main__':
