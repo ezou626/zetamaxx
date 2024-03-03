@@ -2,6 +2,17 @@
 .vscode
 .vscode/
 
+#data files
+data.tsv
+test.tsv
+config.json
+
+#test script
+test.py
+
+#old files
+old/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
