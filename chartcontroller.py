@@ -1,10 +1,11 @@
 from typing import Optional
-from chart import Chart
-from containers import DataContainer
+from visualization import Chart
+from data_container import DataContainer
+from datetime import datetime
 
 class ChartController():
-    """Controls the updates of the chart and other display widgets, stores state
-    """
+    """Controls the updates of the chart and other display widgets, stores state"""
+    
     def __init__(self, chart: Chart, data_container: DataContainer):
         """Sets up initial settings
 
@@ -12,6 +13,7 @@ class ChartController():
             chart (Chart): the chart being managed
             data_container (DataContainer): the data container being used
         """
+        
         self.chart = chart
         self.data_container = data_container
 
@@ -20,8 +22,8 @@ class ChartController():
         self.ratio = False
         
     def update_chart(self):
-        """Utility method to update chart with query
-        """
+        """Update chart with current display settings"""
+        
         x, y, limits = self.data_container.get_data(self.default_time,
                                                     self.default_settings,
                                                     self.ratio)
@@ -31,16 +33,35 @@ class ChartController():
                             time: Optional[bool], 
                             settings: Optional[bool], 
                             ratio: bool) -> None:
+        """Change current display settings
+
+        Args:
+            time (Optional[bool]): Standard time setting, None if all
+            settings (Optional[bool]): Standard settings, None if all
+            ratio (bool): Whether to display data as ratio
+        """
+        
         self.default_time = time
         self.default_settings = settings
         self.ratio = ratio
         self.update_chart()
         
-    def add_point(self, time, score, seconds, default) -> None:
+    def add_point(self, time: datetime, score: int, seconds: int, default: bool) -> None:
+        """Adds a datapoint to data container and update chart
+
+        Args:
+            timestamp (datetime.datetime): Time of result
+            score (int): Score achieved
+            seconds (int): Number of seconds in time limit
+            default (bool): True if default settings, False otherwise
+        """
+        
         self.data_container.add_point(time, score, seconds, default)
         self.update_chart()
         
     def remove_point(self) -> None:
+        """Removes last data entry if it exists added and updates chart"""
+        
         row = None
         if not self.data_container.has_last():
             return
