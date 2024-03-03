@@ -1,7 +1,7 @@
 # Zetamaxx: WIP
 Zetamac progress-tracking Python app
 Built with pandas, matplotlib, tkinter, and immense struggle
-TODO:
+## To Dos
 - Display menu options and their storage
     - Separate chart controller class
     - Handles the update of chart based on data changes
