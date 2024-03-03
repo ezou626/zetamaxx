@@ -68,7 +68,7 @@ class Chart(tk.Frame):
         plt.tight_layout()
         self.scatter.draw_idle()
         
-class Stats(tk.Frame):
+class Stats(tk.LabelFrame):
     """Displays stats for the displayed data"""
     
     def __init__(self, parent):
@@ -77,10 +77,10 @@ class Stats(tk.Frame):
         Args:
             parent (tk.Tk): parent widget
         """
-        tk.Frame.__init__(self, parent)
-        self.high = tk.Label(self)
+        tk.LabelFrame.__init__(self, parent, text = 'Stats', font = ("Segoe UI", 14))
+        self.high = tk.Label(self, font=("Segoe UI", 14))
         self.high.pack()
-        self.average = tk.Label(self)
+        self.average = tk.Label(self, font=("Segoe UI", 14))
         self.average.pack()
         
     def update_stats(self, maximum, average):
