@@ -84,6 +84,12 @@ class Stats(tk.Frame):
         self.average.pack()
         
     def update_stats(self, maximum, average):
+        """Update stats displayed
+
+        Args:
+            maximum (any): the maximum to display
+            average (any): the average to display
+        """
         self.high.config(text = f'High: {maximum}')
         self.average.config(text = f'Average: {average}')
 
