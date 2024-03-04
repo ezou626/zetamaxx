@@ -13,8 +13,7 @@ You can also build the repo yourself with Pyinstaller
 2. Clone the repo
 3. Create a venv and activate it
 4. Use pip to install requirements
-5. Run `pyinstaller --noconsole --name zetamaxx --add-data "icon.png:." --ico
-n "icon.png" app.py`
+5. Run `pyinstaller --noconsole --name zetamaxx --add-data "icon.png:." --icon "icon.png" app.py`
 ## To Dos
 - Visual updates
     - Show removed rows
