@@ -8,7 +8,6 @@ import matplotlib
 import datetime
 matplotlib.use("TkAgg")
 from get_timezone import local_tz, local_pytz
-matplotlib.rcParams.update({'timezone': local_tz.key})
 
 class Chart(tk.Frame):
     """Chart widget that displays data and refreshes upon update"""
@@ -55,7 +54,7 @@ class Chart(tk.Frame):
             fit = np.polyfit(x, y, 1)
             line = np.poly1d(fit)
             test_x = np.linspace(x[0], x[-1], 100)
-            dates = mdates.num2date(test_x)
+            dates = mdates.num2date(test_x, tz='UTC')
             converted_dates = [date.astimezone(local_tz) for date in dates]
             plt.plot_date(converted_dates, line(test_x), '-', tz=local_pytz)
         
